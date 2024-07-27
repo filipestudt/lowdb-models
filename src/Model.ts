@@ -37,6 +37,7 @@ export class Model<T> {
 	}
 
 	async create(obj: T): Promise<void> {
+		this.checkDuplicated(obj)
 		this.getData().push(obj)
 		this.db.write()
 	}
@@ -86,5 +87,13 @@ export class Model<T> {
 		}
 
 		return this.db.data[attr]
+	}
+
+	private async checkDuplicated(obj: T): Promise<void> {
+		for (let attr of this.attributes)
+			if (attr.unique
+				&& attr.unique === true
+				&& await this.findOne(toObject(attr.name, obj[attr.name])))
+				throw new Error('Duplicated')
 	}
 }
