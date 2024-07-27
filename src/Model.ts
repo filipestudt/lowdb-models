@@ -1,3 +1,5 @@
+import { toObject, objectAsArray, ObjectKeyValue } from '../lib'
+
 export type AttributeInfo = {
 	required?: Boolean
 	unique?: Boolean
@@ -42,6 +44,37 @@ export class Model<T> {
 	async findAll(): Promise<Array<T> | null> {
 		return this.getData()
 	}		
+
+	async findOne(query: any): Promise<T | null> {
+		return this.getData().find(entry => {
+			let entryArr = objectAsArray(entry)
+			let queryArr = objectAsArray(query)
+			return this.runQuery(queryArr, entryArr)
+		})
+	}
+
+	async find(query: any): Promise<Array<T>> {
+		return this.getData().filter(entry => {
+			let entryArr = objectAsArray(entry)
+			let queryArr = objectAsArray(query)
+			return this.runQuery(queryArr, entryArr)
+		})
+	}
+
+	private runQuery(queries: Array<ObjectKeyValue>, entries: Array<ObjectKeyValue>): Boolean {		
+		// Filter wich queries are met
+		let queriesMet = queries.filter(query => {
+			// Loop the entry to query
+			// If the result length is one, then the query were met
+			let matched = entries.filter(entry => 
+				query.name === entry.name 
+					&& query.value === entry.value)
+				
+			return matched.length === 1
+		})
+		// If all queries were met the length will be the same
+		return queriesMet.length === queries.length
+	}
 
 	// Get the data of the attribute with the name of the model tableName
 	private getData(): Array<any> {
