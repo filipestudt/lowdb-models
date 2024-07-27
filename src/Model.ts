@@ -1,4 +1,4 @@
-import { toObject, objectAsArray, ObjectKeyValue } from '../lib'
+import { toObject, objectAsArray, ObjectKeyValue } from './lib'
 
 export type AttributeInfo = {
 	required?: Boolean
@@ -61,6 +61,22 @@ export class Model<T> {
 			let queryArr = objectAsArray(query)
 			return this.runQuery(queryArr, entryArr)
 		})
+	}
+
+	async update(query: Object, value: Object): Promise<void> {		
+		(await this.find(query)).map((entry: any) => {
+			let entryArr = objectAsArray(entry)
+			let valueArr = objectAsArray(value)
+
+			for (let property of entryArr) {
+				for (let val of valueArr) {
+					if (property.name === val.name && val.value) {
+						entry[val.name] = val.value
+					}
+				}
+			}
+		})
+		this.db.write()
 	}
 
 	private runQuery(queries: Array<ObjectKeyValue>, entries: Array<ObjectKeyValue>): Boolean {		
