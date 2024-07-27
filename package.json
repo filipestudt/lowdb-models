@@ -1,0 +1,21 @@
+{
+  "name": "lowdb-models",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "npx tsx index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Filipe Studt",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.14.12",
+    "eslint": "^9.7.0",
+    "lowdb": "^7.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
+  }
+}
