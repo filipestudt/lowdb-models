@@ -25,12 +25,11 @@ export type Low = {
 }
 
 export class Model<T> {
-	tableName: String
+	tableName: string
 	db: Low
 	attributes: Array<Attribute>
-	data: Array<T>
 
-	constructor(database: Low, tableName: String, attributes: Array<Attribute>) {
+	constructor(database: Low, tableName: string, attributes: Array<Attribute>) {
 		this.db = database
 		this.tableName = tableName
 		this.attributes = attributes
@@ -94,15 +93,29 @@ export class Model<T> {
 		return queriesMet.length === queries.length
 	}
 
-	// Get the data of the attribute with the name of the model tableName
+	// Get the data of the attribute with the name of the model tableName	
 	private getData(): Array<any> {
-		let attr: any = this.tableName
+		if (!this.db.data) this.db.data = {}
 
-		if (!this.db.data) {
-			this.db.data[attr] = []
-			this.db.write()
-		}
-
+		// Loop into data to check if it has the tableName attribute
+		for (let key in this.db.data) 
+			if (key === this.tableName) return this.db.data[key]		
+		
+		// If not found, create it
+		type DataKey = keyof typeof data
+		
+		// Table name is a key of data
+		// And it's value is the table name
+		let tableName: DataKey = this.tableName
+		
+		// Use the tableName as a PropertyKey
+		let attr: PropertyKey = tableName
+		
+		// Create an attribute inside data, wich name is the value of tableName
+		// and set it's value as an empty array
+		let data = this.db.data
+		this.db.data = Object.defineProperty(data, attr, {value: []})	
+		this.db.write()
 		return this.db.data[attr]
 	}
 
