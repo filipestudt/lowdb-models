@@ -47,18 +47,14 @@ export class Model<T> {
 	}		
 
 	async findOne(query: any): Promise<T | null> {
-		return this.getData().find(entry => {
-			let entryArr = objectAsArray(entry)
-			let queryArr = objectAsArray(query)
-			return this.runQuery(queryArr, entryArr)
+		return this.getData().find(entry => {			
+			return this.runQuery(query, entry)
 		})
 	}
 
 	async find(query: any): Promise<Array<T>> {
 		return this.getData().filter(entry => {
-			let entryArr = objectAsArray(entry)
-			let queryArr = objectAsArray(query)
-			return this.runQuery(queryArr, entryArr)
+			return this.runQuery(query, entry)
 		})
 	}
 
@@ -76,9 +72,11 @@ export class Model<T> {
 			}
 		})
 		this.db.write()
-	}
+	}	
 
-	private runQuery(queries: Array<ObjectKeyValue>, entries: Array<ObjectKeyValue>): Boolean {		
+	private runQuery(query: Object, entry: Object): Boolean {
+		let queries = objectAsArray(query)
+		let entries = objectAsArray(entry)
 		// Filter wich queries are met
 		let queriesMet = queries.filter(query => {
 			// Loop the entry to query
@@ -101,22 +99,34 @@ export class Model<T> {
 		for (let key in this.db.data) 
 			if (key === this.tableName) return this.db.data[key]		
 		
-		// If not found, create it
-		type DataKey = keyof typeof data
+		// If not found, create it		
+		// Use the tableName as a PropertyKey
+		let tableName: PropertyKey = this.getTableNameAsPropertyKey()
+		
+		// Create an attribute inside data, wich name is the value of tableName
+		// and set it's value as an empty array
+		this.write([])
+		
+		return this.db.data[tableName]
+	}
+
+	private getTableNameAsPropertyKey(): PropertyKey {
+		type DataKey = keyof typeof this.db.data
 		
 		// Table name is a key of data
 		// And it's value is the table name
 		let tableName: DataKey = this.tableName
 		
+		return tableName
+	}
+
+	private async write(value: Array<Object>): Promise<void> {
 		// Use the tableName as a PropertyKey
-		let attr: PropertyKey = tableName
+		let tableName: PropertyKey = this.getTableNameAsPropertyKey()
 		
-		// Create an attribute inside data, wich name is the value of tableName
-		// and set it's value as an empty array
-		let data = this.db.data
-		this.db.data = Object.defineProperty(data, attr, {value: []})	
+		let data = this.db.data || {}
+		this.db.data = Object.defineProperty(data, tableName, {value})	
 		this.db.write()
-		return this.db.data[attr]
 	}
 
 	private async checkDuplicated(obj: T): Promise<void> {
