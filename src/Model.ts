@@ -29,10 +29,13 @@ export class Model<T> {
 	db: Low
 	attributes: Array<Attribute>
 
-	constructor(database: Low, tableName: string, attributes: Array<Attribute>) {
-		this.db = database
+	constructor(tableName: string, attributes: Array<Attribute>) {
 		this.tableName = tableName
 		this.attributes = attributes
+	}
+
+	init(database: Low) {
+		this.db = database
 	}
 
 	async create(obj: T): Promise<void> {
