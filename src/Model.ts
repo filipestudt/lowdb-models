@@ -58,21 +58,14 @@ export class Model<T> {
 		})
 	}
 
-	async update(query: Object, value: Object): Promise<void> {		
+	async update(query: Object, obj: Object): Promise<void> {
 		(await this.find(query)).map((entry: any) => {
-			let entryArr = objectAsArray(entry)
-			let valueArr = objectAsArray(value)
-
-			for (let property of entryArr) {
-				for (let val of valueArr) {
-					if (property.name === val.name && val.value) {
-						entry[val.name] = val.value
-					}
-				}
-			}
+			for (let key of Object.keys(obj))
+				if (Object.keys(this.attributes).includes(key))
+					Object.defineProperty(entry, key, {value: obj[key], writable: true})					
 		})
 		this.db.write()
-	}
+	}	
 
 	async remove(query: Object): Promise<void> {
 		// Filter the data saving only the results that did not match the query
@@ -135,7 +128,7 @@ export class Model<T> {
 		let tableName: PropertyKey = this.getTableNameAsPropertyKey()
 		
 		let data = this.db.data || {}
-		this.db.data = Object.defineProperty(data, tableName, {value})	
+		this.db.data = Object.defineProperty(data, tableName, {value, writable: true})	
 		this.db.write()
 	}
 
