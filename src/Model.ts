@@ -72,7 +72,17 @@ export class Model<T> {
 			}
 		})
 		this.db.write()
-	}	
+	}
+
+	async remove(query: Object): Promise<void> {
+		// Filter the data saving only the results that did not match the query
+		let newData = this.getData().filter(entry => {
+			// If matched the query return false
+			return !this.runQuery(query, entry)
+		})
+
+		this.write(newData)
+	}
 
 	private runQuery(query: Object, entry: Object): Boolean {
 		let queries = objectAsArray(query)
