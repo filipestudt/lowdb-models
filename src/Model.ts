@@ -3,6 +3,7 @@ import { toObject, objectAsArray, ObjectKeyValue } from './lib'
 export type AttributeInfo = {
 	required?: Boolean
 	unique?: Boolean
+	generate?: Function
 }
 
 // The model creator set the attribute's name as an own property
@@ -39,6 +40,7 @@ export class Model<T> {
 	}
 
 	async create(obj: T): Promise<void> {
+		this.generate(obj)
 		this.checkDuplicated(obj)
 		this.checkRequired(obj)
 		this.getData().push(obj)
@@ -149,5 +151,11 @@ export class Model<T> {
 				&& attr.required === true
 				&& !obj[attr.name])
 				throw new Error('Required')
+	}
+
+	private generate(obj: T): void {
+		for (let attr of this.attributes)
+			for (let key in obj)
+				if (key === attr.name && attr.generate) obj[attr.name] = attr.generate()
 	}
 }
