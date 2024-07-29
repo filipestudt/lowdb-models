@@ -9,13 +9,9 @@
 ```sh
 npm install lowdb-models
 ```
-_This package depends on lowdb_
-```sh
-npm install lowdb
-```
 
 ## Usage
-_Be aware that lowdb may change it's instance method_
+_Be aware that lowdb could change it's instance method_
 ```js
 import { JSONFilePreset } from 'lowdb/node' // This could change
 import { newModel } from 'lowdb-models'
@@ -62,7 +58,7 @@ Model's data is kept inside it's tableName value
 Retrieving data
 ```js
 Posts.findAll()
->> [{id: 1, title: 'title', author: 'john'}] 
+>> [{id: 1, title: 'Cool title', author: 'John'}] 
 ```
 
 ```js
