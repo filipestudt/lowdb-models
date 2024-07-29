@@ -1,12 +1,13 @@
 {
   "name": "lowdb-models",
   "version": "0.7.2",
-  "description": "",
+  "description": "Simple model implementation to use with lowdb",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "npx tsx index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "npx tsc"
   },
   "keywords": [],
   "author": "Filipe Studt",
