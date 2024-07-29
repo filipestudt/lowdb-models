@@ -1,4 +1,4 @@
-import { toObject, objectAsArray, ObjectKeyValue } from './lib'
+import { toObject, objectAsArray, ObjectKeyValue } from './lib/index.js'
 
 export type AttributeInfo = {
 	required?: Boolean
@@ -25,7 +25,15 @@ export type Low = {
 	write: Function
 }
 
-export class Model<T> {
+export function newModel(attributes: Attributes, info: {tableName: string}): Model<any> {	
+	let attributesArr: Array<any> = []
+	for (let key in attributes) {
+		attributesArr.push({name: key,...attributes[key]})
+	}
+	return new Model(info.tableName, attributesArr)
+}
+
+class Model<T> {
 	tableName: string
 	db: Low
 	attributes: Array<Attribute>
