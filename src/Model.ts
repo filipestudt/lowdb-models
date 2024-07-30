@@ -49,7 +49,7 @@ class Model<T> {
 
 	async create(obj: T): Promise<void> {
 		this.generate(obj)
-		this.checkDuplicated(obj)
+		await this.checkDuplicated(obj)
 		this.checkRequired(obj)
 		this.getData().push(obj)
 		this.db.write()
@@ -153,7 +153,7 @@ class Model<T> {
 				throw new Error('Duplicated')
 	}
 
-	private async checkRequired(obj: T): Promise<void> {
+	private checkRequired(obj: T): void {
 		for (let attr of this.attributes)
 			if (attr.required
 				&& attr.required === true

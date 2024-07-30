@@ -1,12 +1,13 @@
 {
   "name": "lowdb-models",
-  "version": "0.7.2",
+  "version": "0.7.3",
   "description": "Simple model implementation to use with lowdb",
   "main": "index.js",
   "type": "module",
   "scripts": {
     "start": "npx tsx index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --import tsx/esm --test src/**/*.test.ts src/**/**/*.test.ts",
+    "testxv": "xv --loader=ts-node/esm src",
     "build": "npx tsc"
   },
   "keywords": [],
@@ -17,6 +18,7 @@
     "eslint": "^9.7.0",
     "lowdb": "^7.0.1",
     "ts-node": "^10.9.2",
-    "typescript": "^5.5.4"
+    "typescript": "^5.5.4",
+    "xv": "^2.1.1"
   }
 }
