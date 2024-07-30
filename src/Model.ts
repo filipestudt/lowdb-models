@@ -73,9 +73,8 @@ class Model<T> {
 
 	async update(query: Object, obj: Object): Promise<void> {
 		(await this.find(query)).map((entry: any) => {
-			for (let key of Object.keys(obj))
-				if (Object.keys(this.attributes).includes(key))
-					Object.defineProperty(entry, key, {value: obj[key], writable: true})					
+			for (let key of Object.keys(obj))				
+					entry[key] = obj[key]
 		})
 		this.db.write()
 	}	
@@ -141,7 +140,8 @@ class Model<T> {
 		let tableName: PropertyKey = this.getTableNameAsPropertyKey()
 		
 		let data = this.db.data || {}
-		this.db.data = Object.defineProperty(data, tableName, {value, writable: true})	
+		data[tableName] = value
+		this.db.data = data
 		this.db.write()
 	}
 
