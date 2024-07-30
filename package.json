@@ -1,6 +1,6 @@
 {
   "name": "lowdb-models",
-  "version": "0.7.4",
+  "version": "0.7.5",
   "description": "Simple model implementation to use with lowdb",
   "main": "index.js",
   "type": "module",

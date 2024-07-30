@@ -51,7 +51,14 @@ class Model<T> {
 		this.generate(obj)
 		await this.checkDuplicated(obj)
 		this.checkRequired(obj)
-		this.getData().push(obj)
+
+		// Only write attributes declared on the model
+		let objToWrite = {}
+		for (let key of Object.keys(obj))				
+			for (let attr of this.attributes)
+				if (attr.name === key) objToWrite[key] = obj[key]
+
+		this.getData().push(objToWrite)
 		this.db.write()
 	}
 
@@ -74,7 +81,8 @@ class Model<T> {
 	async update(query: Object, obj: Object): Promise<void> {
 		(await this.find(query)).map((entry: any) => {
 			for (let key of Object.keys(obj))				
-					entry[key] = obj[key]
+				for (let attr of this.attributes)
+					if (attr.name === key) entry[key] = obj[key]
 		})
 		this.db.write()
 	}	
