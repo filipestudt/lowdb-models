@@ -10,9 +10,20 @@
     "testxv": "xv --loader=ts-node/esm src",
     "build": "npx tsc"
   },
-  "keywords": [],
+  "keywords": [
+    "database",
+    "db",
+    "JSON",
+    "local",
+    "localStorage",
+    "model"
+  ],
   "author": "Filipe Studt",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filipestudt/lowdb-models.git"
+  },
   "devDependencies": {
     "@types/node": "^20.14.12",
     "eslint": "^9.7.0",
