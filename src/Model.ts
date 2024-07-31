@@ -171,7 +171,6 @@ class Model<T> {
 
 	private generate(obj: T): void {
 		for (let attr of this.attributes)
-			for (let key in obj)
-				if (key === attr.name && attr.generate) obj[attr.name] = attr.generate()
+			if (attr.generate) obj[attr.name] = attr.generate()
 	}
 }
