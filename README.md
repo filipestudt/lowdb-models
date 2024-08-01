@@ -43,7 +43,7 @@ Posts.init(db)
 Writing data
 
 ```js
-Posts.create({id: 1, title: 'Cool title', author: 'John'})
+await Posts.create({id: 1, title: 'Cool title', author: 'John'})
 ```
 Model's data is kept inside it's tableName value
 ```js
@@ -57,20 +57,20 @@ Model's data is kept inside it's tableName value
 
 Retrieving data
 ```js
-Posts.findAll()
+await Posts.findAll()
 >> [{id: 1, title: 'Cool title', author: 'John'}] 
 ```
 
 ```js
-Posts.find({ title: 'title' })
+await Posts.find({ title: 'title' })
 ```
 ```js
-Posts.findOne({ id: 1 })
+await Posts.findOne({ id: 1 })
 ```
 
 Update
 ```js
-Posts.update({ id: 1},
+await Posts.update({ id: 1},
   {
     title: 'New cool title'
   })
